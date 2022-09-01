@@ -1,8 +1,8 @@
 package org.acme;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.Objects;
 
 @Entity
 public class Person {
@@ -10,6 +10,8 @@ public class Person {
     private Long id;
     private String name;
     private LocalDate birth;
+    @Column(columnDefinition = "ENUM('Alive','Death')")
+    @Enumerated(EnumType.STRING)
     private Status status;
 
     public Long getId() {
@@ -64,8 +66,21 @@ public class Person {
         return this;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Person person = (Person) o;
+        return Objects.equals(id, person.id) && Objects.equals(name, person.name) && Objects.equals(birth, person.birth) && status == person.status;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name, birth, status);
+    }
+
     public enum Status {
-        Death,
-        Alive
+        Alive,
+        Death
     }
 }

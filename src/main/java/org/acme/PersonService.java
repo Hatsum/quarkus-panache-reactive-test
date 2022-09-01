@@ -15,7 +15,7 @@ public class PersonService {
 
     @ReactiveTransactional
     public Uni<Person> create(Person person) {
-        return Panache.withTransaction(() -> personRepository.persist(person));
+        return personRepository.persist(person);
     }
 
     public Uni<Person> get(Long id) {
